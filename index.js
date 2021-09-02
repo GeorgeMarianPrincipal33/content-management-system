@@ -52,6 +52,21 @@ function openModal(){
 
 function closeModal(){
     var modal = document.getElementById("myModal");
-    
+
     modal.style.display = "none";
+}
+
+function createNewEntry(){
+    var name = document.getElementById('new-name').value
+    var surname = document.getElementById('new-surname').value
+    var email = document.getElementById('new-email').value
+    var gender = document.getElementById('new-gender').value
+    var birthdate = document.getElementById('new-birthdate').value
+    console.log({
+        name,
+        surname,
+        email,
+        gender,
+        birthdate
+    })
 }
