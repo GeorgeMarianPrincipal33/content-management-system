@@ -8,9 +8,46 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <title>CMS</title>
     </head>
+
     <body>
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+              <span class="close" onclick="closeModal()">&times;</span><br>
+
+              <form class="modal-form">
+                <div>
+                    <input type="text" id="new-name" name="new-name" placeholder="Nume">
+                </div>
+                
+                <div>
+                    <input type="text" id="new-surname" name="new-surname" placeholder="Prenume">
+                </div>
+                
+                <div>
+                    <input type="text" id="new-email" name="new-email" placeholder="Email">
+                </div>
+                
+                <div>
+                    <input type="text" id="new-gender" name="new-gender" placeholder="Sex">
+                </div>
+                
+                <div>
+                    <input type="text" id="new-birthdate" name="new-birthdate" placeholder="Ziua de nastere">
+                </div>
+
+                <div>
+                    <button class="btn-newentry">Create</button>
+                </div>
+                
+            </form>
+            </div>
+          
+          </div>
+
         <div class="center">
-            <button class="btn-newentry">New entry</button>
+            <button class="btn-newentry" onclick="openModal()">New entry</button>
 
             <table id='entries'>
                 <tr>
