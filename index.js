@@ -30,7 +30,6 @@ let tableContent = [
 ]
 
 function tableCreate(){
-    var body = document.body
     var tbl  = document.getElementById('entries');
 
     for(const entry of tableContent){
@@ -62,11 +61,12 @@ function createNewEntry(){
     var email = document.getElementById('new-email').value
     var gender = document.getElementById('new-gender').value
     var birthdate = document.getElementById('new-birthdate').value
-    console.log({
-        name,
-        surname,
-        email,
-        gender,
-        birthdate
-    })
+    
+    var tbl  = document.getElementById('entries');
+    var tr = tbl.insertRow();
+
+    for(const input in [name, surname, email, gender, birthdate]){
+        var td = tr.insertCell();
+        td.appendChild(document.createTextNode(input));
+    }
 }
