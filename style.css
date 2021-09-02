@@ -1,8 +1,7 @@
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  /* width: 50%; */
-  
+  background-color: #F3F0D7;
 }
 
 .center {
@@ -14,14 +13,27 @@ table {
 
 .btn-newentry{
   margin-bottom: 2%;
+
+  color: rgb(46, 43, 43);
+  background-color: #CEE5D0;
+  border-radius: 4px;
+  text-align: center;
+  padding: 9px 15px;
+  font-size: 14px;
+  border: 1px;
+  cursor: pointer;
 }
 
 td, th {
-  border: 1px solid #dddddd;
+  border-bottom: 1px solid #ddd;
   text-align: left;
   padding: 8px;
 }
 
-tr:nth-child(even) {
-  background-color: #dddddd;
+tr:hover{
+  background-color: #F7D59C;
 }
+
+/* tr:nth-child(even) {
+  background-color: #38A3A5;
+} */
