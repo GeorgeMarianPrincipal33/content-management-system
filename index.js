@@ -65,8 +65,10 @@ function createNewEntry(){
     var tbl  = document.getElementById('entries');
     var tr = tbl.insertRow();
 
-    for(const input in [name, surname, email, gender, birthdate]){
+    for(const input of [name, surname, email, gender, birthdate]){
         var td = tr.insertCell();
         td.appendChild(document.createTextNode(input));
     }
+
+    closeModal()
 }
