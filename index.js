@@ -104,6 +104,14 @@ function createNewEntry(){
     var tr = tbl.insertRow();
     tr.id = ids++
 
+    tableContent.push({
+        name: name,
+        surname: surname,
+        email: email,
+        gender: gender,
+        birthdate: birthdate
+    })
+
     for(const input of [name, surname, email, gender, birthdate]){
         var td = tr.insertCell();
         td.appendChild(document.createTextNode(input));
@@ -125,12 +133,26 @@ function validateEmail(email){
     return undefined
 }
 
-function formatDate(date){
-    var formatter = date.split('-')
+function formatDate(user_date){
+    if(!user_date){
+        return undefined
+    }
+
+    var birthdate = new Date(user_date)
+    if(calculateAge(birthdate) < 16)
+        return undefined
+
+    var formatter = user_date.split('-')
     var year = formatter[0]
     var monthIndex = Number(formatter[1])
     var month = months[monthIndex]
     var day = formatter[2]
 
     return `${day} ${month} ${year}`
+}
+
+function calculateAge(birthday) { // birthday is a date
+    var ageDifMs = Date.now() - birthday.getTime();
+    var ageDate = new Date(ageDifMs); // miliseconds from epoch
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
