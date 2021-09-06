@@ -94,9 +94,14 @@ input, select {
 }
 
 .input-textfield{
+  float: right;
   margin-bottom: 2%;
-  margin-left: 10%;
+  margin-left: 15%;
   padding: 9px 15px;
   font-size: 14px;
   border-radius: 8px;
+}
+
+.btn-search {
+  float: right;
 }

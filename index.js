@@ -239,3 +239,23 @@ function sortEntriesByName(){
 
     tbody.parentNode.replaceChild(new_tbody, tbody)
 }
+
+function searchByName(){
+    var inputValue = document.getElementById('searchBar').value
+    
+    if(inputValue == '')
+        return
+
+    var tbody  = document.getElementById('entries').getElementsByTagName('tbody')[0]
+    var new_tbody = document.createElement('tbody')
+
+    var searchedEntries = tableContent.filter((value, index, arr) => {
+        return value.name.toLowerCase().includes(inputValue.toLowerCase()) 
+    })
+
+    for(const entry of searchedEntries){
+        addElementInTable(new_tbody, entry)
+    }
+
+    tbody.parentNode.replaceChild(new_tbody, tbody)
+}

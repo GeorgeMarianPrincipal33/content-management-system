@@ -41,12 +41,13 @@
                 </div>
 
                 <div>
+                    <input id="new-image" type="file"></input>
+                </div>
+
+                <div>
                     <button class="btn-newentry" onclick="createNewEntry()">Create</button>
                 </div>
                 
-                <div>
-                    <input id="new-image" type="file">Choose Image</input>
-                </div>
                 
             </div>
             </div>
@@ -58,7 +59,8 @@
 
             <button class="btn-newentry" onclick="sortEntriesByName()">Sort by Name</button>
 
-            <input type="text" class="input-textfield" placeholder="Name">
+            <input type="search" id="searchBar" class="input-textfield" placeholder="Name" >
+            <button class="btn-newentry btn-search"  onclick="searchByName()">Search</button>
             <table id='entries'>
                 <thead>
                     <tr>
