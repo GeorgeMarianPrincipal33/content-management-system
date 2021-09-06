@@ -123,14 +123,9 @@ function createNewEntry(){
         return
     }
 
-    const file = document.getElementById('new-image').files[0]
-
-    var imageReader = new FileReader()
-    imageReader.addEventListener('load', () => {
-        var profilePic = imageReader.result
-
+    const addNewEntry = (img) => {
         var element = {
-            profileImg: profilePic,
+            profileImg: img,
             name: name,
             surname: surname,
             email: email,
@@ -142,9 +137,23 @@ function createNewEntry(){
         addElementInTable(tbl, element)
     
         closeModal()
+    }
+
+    const file = document.getElementById('new-image').files[0]
+
+    var imageReader = new FileReader()
+    imageReader.addEventListener('load', () => {
+        var profilePic = imageReader.result
+
+        addNewEntry(profilePic)
     })
     
-    imageReader.readAsDataURL(file)
+    if(file == undefined){
+        addNewEntry(undefined)
+    }
+    else {
+        imageReader.readAsDataURL(file)
+    }
     
 }
 
@@ -201,4 +210,8 @@ function addElementInTable(tbl, entry) {
 
     var td = tr.insertCell();
     td.appendChild(createButton(tr.id));
+}
+
+function sortEntriesByName(){
+
 }
