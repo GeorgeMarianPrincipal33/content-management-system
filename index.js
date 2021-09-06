@@ -17,7 +17,7 @@ let tableContent = [
     },
     {
         profileImg: undefined,
-        name: "name2",
+        name: "aname2",
         surname: "surname2",
         email: "email2@email.com",
         gender: "Feminin",
@@ -25,7 +25,7 @@ let tableContent = [
     },
     {
         profileImg: undefined,
-        name: "name3",
+        name: "dname3",
         surname: "surname3",
         email: "email3@email.com",
         gender: "Feminin",
@@ -50,7 +50,7 @@ const months = [
 ids = 0
 
 function tableCreate(){
-    var tbl  = document.getElementById('entries');
+    var tbl  = document.getElementById('entries').getElementsByTagName('tbody')[0]
 
     for(const entry of tableContent){
         addElementInTable(tbl, entry)
@@ -81,7 +81,20 @@ function createImage(url){
 }
 
 function onDelete(id){
-    document.getElementById(id).remove()
+    var row = document.getElementById(id)
+    const entry = {
+        name: row.childNodes[1].textContent,
+        surname: row.childNodes[2].textContent,
+        email: row.childNodes[3].textContent,
+        gender: row.childNodes[4].textContent,
+        birthdate: row.childNodes[5].textContent
+    }
+
+    tableContent = tableContent.filter((value, index, arr) => {
+        return JSON.stringify(value) != JSON.stringify(entry)
+    })
+
+    row.remove()
 }
 
 function openModal(){
@@ -133,7 +146,7 @@ function createNewEntry(){
             birthdate: birthdate
         }
         tableContent.push(element)
-        var tbl  = document.getElementById('entries');
+        var tbl  = document.getElementById('entries').getElementsByTagName('tbody')[0]
         addElementInTable(tbl, element)
     
         closeModal()
@@ -213,5 +226,16 @@ function addElementInTable(tbl, entry) {
 }
 
 function sortEntriesByName(){
+    var tbody  = document.getElementById('entries').getElementsByTagName('tbody')[0]
+    var new_tbody = document.createElement('tbody')
 
+    tableContent.sort((a, b) => {
+        return a.name.localeCompare(b.name)
+    })
+
+    for(const entry of tableContent){
+        addElementInTable(new_tbody, entry)
+    }
+
+    tbody.parentNode.replaceChild(new_tbody, tbody)
 }
