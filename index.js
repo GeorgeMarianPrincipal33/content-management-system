@@ -49,15 +49,7 @@ function tableCreate(){
     var tbl  = document.getElementById('entries');
 
     for(const entry of tableContent){
-        var tr = tbl.insertRow();
-        tr.id = ids++
-        for(const entryProperty in entry){
-            var td = tr.insertCell();
-            td.appendChild(document.createTextNode(entry[entryProperty]));
-        }
-
-        var td = tr.insertCell();
-        td.appendChild(createButton(tr.id));
+        addElementInTable(tbl, entry)
     }
 }
 tableCreate();
@@ -93,49 +85,47 @@ function createNewEntry(){
 
     var name = document.getElementById('new-name').value
     var surname = document.getElementById('new-surname').value
-    if(!name || !surname ){
-        loggingMessage = "No name or surname war provided\n"
-    }
-
+    
     var email = validateEmail(document.getElementById('new-email').value, {loggingMessage})
     var gender = document.getElementById('new-gender').value
     var birthdate = formatDate(document.getElementById('new-birthdate').value, {loggingMessage})
     
-    const file = document.getElementById('new-image').files[0]
-
+    if(!name || !surname ){
+        loggingMessage = "No name or surname war provided\n"
+    }
+    
     if(!email){
         loggingMessage = loggingMessage.concat('The email format is wrong\n' )
     }
-
+    
     if(!birthdate){
         loggingMessage = loggingMessage.concat('You must be at least 16 years old or the you have not selected anything!\n' )
     }
-
     
     if(loggingMessage.length != 0){
         alert(loggingMessage)
         return
     }
 
-    var tbl  = document.getElementById('entries');
-    var tr = tbl.insertRow();
-    tr.id = ids++
+    const file = document.getElementById('new-image').files[0]
 
-    tableContent.push({
+    var imageReader = new FileReader()
+    imageReader.addEventListener('load', () => {
+        var profilePic = imageReader.result
+    })
+    
+    var element = {
         name: name,
         surname: surname,
         email: email,
         gender: gender,
         birthdate: birthdate
-    })
-
-    for(const input of [name, surname, email, gender, birthdate]){
-        var td = tr.insertCell();
-        td.appendChild(document.createTextNode(input));
     }
+    tableContent.push(element)
 
-    var td = tr.insertCell();
-    td.appendChild(createButton(tr.id));
+    var tbl  = document.getElementById('entries');
+
+    addElementInTable(tbl, element)
 
     closeModal()
 }
@@ -172,4 +162,16 @@ function calculateAge(birthday) { // birthday is a date
     var ageDifMs = Date.now() - birthday.getTime();
     var ageDate = new Date(ageDifMs); // miliseconds from epoch
     return Math.abs(ageDate.getUTCFullYear() - 1970);
+}
+
+function addElementInTable(tbl, entry) {
+    var tr = tbl.insertRow();
+    tr.id = ids++
+    for(const entryProperty in entry){
+        var td = tr.insertCell();
+        td.appendChild(document.createTextNode(entry[entryProperty]));
+    }
+
+    var td = tr.insertCell();
+    td.appendChild(createButton(tr.id));
 }
