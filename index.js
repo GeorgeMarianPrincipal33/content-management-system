@@ -89,14 +89,31 @@ function closeModal(){
 }
 
 function createNewEntry(){
+    let loggingMessage = new String('');
+
     var name = document.getElementById('new-name').value
     var surname = document.getElementById('new-surname').value
-    var email = validateEmail(document.getElementById('new-email').value)
+    if(!name || !surname ){
+        loggingMessage = "No name or surname war provided\n"
+    }
+
+    var email = validateEmail(document.getElementById('new-email').value, {loggingMessage})
     var gender = document.getElementById('new-gender').value
-    var birthdate = formatDate(document.getElementById('new-birthdate').value)
+    var birthdate = formatDate(document.getElementById('new-birthdate').value, {loggingMessage})
     
-    if(!name || !surname || !email || !gender || !birthdate){
-        alert("All the fields must be completed")
+    const file = document.getElementById('new-image').files[0]
+
+    if(!email){
+        loggingMessage = loggingMessage.concat('The email format is wrong\n' )
+    }
+
+    if(!birthdate){
+        loggingMessage = loggingMessage.concat('You must be at least 16 years old or the you have not selected anything!\n' )
+    }
+
+    
+    if(loggingMessage.length != 0){
+        alert(loggingMessage)
         return
     }
 
@@ -133,7 +150,7 @@ function validateEmail(email){
     return undefined
 }
 
-function formatDate(user_date){
+function formatDate(user_date, str){
     if(!user_date){
         return undefined
     }
