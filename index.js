@@ -1,5 +1,6 @@
 let tableContent = [
     {
+        profileImg: undefined,
         name: "Marian",
         surname: "George",
         email: "george@email.com",
@@ -7,6 +8,7 @@ let tableContent = [
         birthdate: "21 April 3020"
     },
     {
+        profileImg: undefined,
         name: "name1",
         surname: "surname1",
         email: "email1@email.com",
@@ -14,6 +16,7 @@ let tableContent = [
         birthdate: "21 August 3020"
     },
     {
+        profileImg: undefined,
         name: "name2",
         surname: "surname2",
         email: "email2@email.com",
@@ -21,6 +24,7 @@ let tableContent = [
         birthdate: "21 May 3020"
     },
     {
+        profileImg: undefined,
         name: "name3",
         surname: "surname3",
         email: "email3@email.com",
@@ -62,6 +66,18 @@ function createButton(id){
     btn.onclick = (function(id) {return function() {onDelete(id);}})(id);
     
     return btn
+}
+
+function createImage(url){
+    if(url == undefined){
+        url = 'resources/no_profile_image.png'
+    }
+    
+    var img = document.createElement('img')
+    img.src = url
+    img.className = 'profile-img'
+
+    return img
 }
 
 function onDelete(id){
@@ -112,22 +128,24 @@ function createNewEntry(){
     var imageReader = new FileReader()
     imageReader.addEventListener('load', () => {
         var profilePic = imageReader.result
+
+        var element = {
+            profileImg: profilePic,
+            name: name,
+            surname: surname,
+            email: email,
+            gender: gender,
+            birthdate: birthdate
+        }
+        tableContent.push(element)
+        var tbl  = document.getElementById('entries');
+        addElementInTable(tbl, element)
+    
+        closeModal()
     })
     
-    var element = {
-        name: name,
-        surname: surname,
-        email: email,
-        gender: gender,
-        birthdate: birthdate
-    }
-    tableContent.push(element)
-
-    var tbl  = document.getElementById('entries');
-
-    addElementInTable(tbl, element)
-
-    closeModal()
+    imageReader.readAsDataURL(file)
+    
 }
 
 function validateEmail(email){
@@ -169,7 +187,16 @@ function addElementInTable(tbl, entry) {
     tr.id = ids++
     for(const entryProperty in entry){
         var td = tr.insertCell();
-        td.appendChild(document.createTextNode(entry[entryProperty]));
+        var element;
+
+        if(entryProperty == 'profileImg'){
+           element = createImage(entry[entryProperty]);
+        } else {
+            element = document.createTextNode(entry[entryProperty])
+        }
+
+        td.appendChild(element);
+
     }
 
     var td = tr.insertCell();
