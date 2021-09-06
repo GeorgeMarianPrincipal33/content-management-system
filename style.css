@@ -92,3 +92,11 @@ input, select {
   height: 50px;
   border-radius: 50%;
 }
+
+.input-textfield{
+  margin-bottom: 2%;
+  margin-left: 10%;
+  padding: 9px 15px;
+  font-size: 14px;
+  border-radius: 8px;
+}
