@@ -4,32 +4,16 @@ let tableContent = [
         name: "Marian",
         surname: "George",
         email: "george@email.com",
-        gender: "Masculin",
+        gender: "Male",
         birthdate: "21 April 3020"
     },
     {
         profileImg: undefined,
-        name: "name1",
-        surname: "surname1",
-        email: "email1@email.com",
-        gender: "Masculin",
-        birthdate: "21 August 3020"
-    },
-    {
-        profileImg: undefined,
-        name: "aname2",
-        surname: "surname2",
-        email: "email2@email.com",
-        gender: "Feminin",
-        birthdate: "21 May 3020"
-    },
-    {
-        profileImg: undefined,
-        name: "dname3",
-        surname: "surname3",
-        email: "email3@email.com",
-        gender: "Feminin",
-        birthdate: "21 July 3020"
+        name: "Ancuta",
+        surname: "Carmen",
+        email: "email1@gmail.com",
+        gender: "Female",
+        birthdate: "21 August 1998"
     },
 ]
 
@@ -250,7 +234,8 @@ function searchByName(){
     var new_tbody = document.createElement('tbody')
 
     var searchedEntries = tableContent.filter((value, index, arr) => {
-        return value.name.toLowerCase().includes(inputValue.toLowerCase()) 
+        return value.name.toLowerCase().includes(inputValue.toLowerCase()) || 
+                value.surname.toLowerCase().includes(inputValue.toLowerCase())
     })
 
     for(const entry of searchedEntries){
