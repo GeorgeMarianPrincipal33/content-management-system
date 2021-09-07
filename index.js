@@ -33,16 +33,16 @@ const months = [
 ]
 ids = 0
 
-function tableCreate(){
+function tableCreate() {
     var tbl  = document.getElementById('entries').getElementsByTagName('tbody')[0]
 
-    for(const entry of tableContent){
+    for(const entry of tableContent) {
         addElementInTable(tbl, entry)
     }
 }
 tableCreate();
 
-function createButton(id){
+function createButton(id) {
     var btn = document.createElement('input');
     btn.type = "button";
     btn.className = "btn btn-newentry";
@@ -52,8 +52,8 @@ function createButton(id){
     return btn
 }
 
-function createImage(url){
-    if(url == undefined){
+function createImage(url) {
+    if(url == undefined) {
         url = 'resources/no_profile_image.png'
     }
     
@@ -64,9 +64,9 @@ function createImage(url){
     return img
 }
 
-function onDelete(id){
+function onDelete(id) {
 
-    if(confirm('Are you sure you want to remove this entry?')){
+    if(confirm('Are you sure you want to remove this entry?')) {
         var row = document.getElementById(id)
         const entry = {
             name: row.childNodes[1].textContent,
@@ -85,19 +85,26 @@ function onDelete(id){
     
 }
 
-function openModal(){
+function openModal() {
     var modal = document.getElementById("myModal");
 
     modal.style.display = "block";
 }
 
-function closeModal(){
+function closeModal() {
     var modal = document.getElementById("myModal");
 
     modal.style.display = "none";
 }
 
-function createNewEntry(){
+function clearFields() {
+    document.getElementById('new-name').value = ''
+    document.getElementById('new-surname').value = ''
+    document.getElementById('new-email').value = ''
+    document.getElementById('new-birthdate').value = ''
+}
+
+function createNewEntry() {
     let loggingMessage = new String('');
 
     var name = document.getElementById('new-name').value
@@ -107,19 +114,19 @@ function createNewEntry(){
     var gender = document.getElementById('new-gender').value
     var birthdate = formatDate(document.getElementById('new-birthdate').value, {loggingMessage})
     
-    if(!name || !surname ){
+    if(!name || !surname ) {
         loggingMessage = "No name or surname war provided\n"
     }
     
-    if(!email){
+    if(!email) {
         loggingMessage = loggingMessage.concat('The email format is wrong\n' )
     }
     
-    if(!birthdate){
+    if(!birthdate) {
         loggingMessage = loggingMessage.concat('You must be at least 16 years old or the you have not selected anything!\n' )
     }
     
-    if(loggingMessage.length != 0){
+    if(loggingMessage.length != 0) {
         alert(loggingMessage)
         return
     }
@@ -136,7 +143,8 @@ function createNewEntry(){
         tableContent.push(element)
         var tbl  = document.getElementById('entries').getElementsByTagName('tbody')[0]
         addElementInTable(tbl, element)
-    
+        
+        clearFields()
         closeModal()
     }
 
@@ -149,7 +157,7 @@ function createNewEntry(){
         addNewEntry(profilePic)
     })
     
-    if(file == undefined){
+    if(file == undefined) {
         addNewEntry(undefined)
     }
     else {
@@ -158,17 +166,17 @@ function createNewEntry(){
     
 }
 
-function validateEmail(email){
+function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     
-    if(re.test(String(email).toLowerCase())){
+    if(re.test(String(email).toLowerCase())) {
         return email
     }
     
     return undefined
 }
 
-function formatDate(user_date, str){
+function formatDate(user_date, str) {
     if(!user_date){
         return undefined
     }
@@ -199,7 +207,7 @@ function addElementInTable(tbl, entry) {
         var td = tr.insertCell();
         var element;
 
-        if(entryProperty == 'profileImg'){
+        if(entryProperty == 'profileImg') {
            element = createImage(entry[entryProperty]);
         } else {
             element = document.createTextNode(entry[entryProperty])
@@ -213,7 +221,7 @@ function addElementInTable(tbl, entry) {
     td.appendChild(createButton(tr.id));
 }
 
-function sortEntriesByName(){
+function sortEntriesByName() {
     var tbody  = document.getElementById('entries').getElementsByTagName('tbody')[0]
     var new_tbody = document.createElement('tbody')
 
@@ -221,14 +229,14 @@ function sortEntriesByName(){
         return a.name.localeCompare(b.name)
     })
 
-    for(const entry of tableContent){
+    for(const entry of tableContent) {
         addElementInTable(new_tbody, entry)
     }
 
     tbody.parentNode.replaceChild(new_tbody, tbody)
 }
 
-function searchByName(){
+function searchByName() {
     var inputValue = document.getElementById('searchBar').value
     
     if(inputValue == '')
@@ -242,7 +250,7 @@ function searchByName(){
                 value.surname.toLowerCase().includes(inputValue.toLowerCase())
     })
 
-    for(const entry of searchedEntries){
+    for(const entry of searchedEntries) {
         addElementInTable(new_tbody, entry)
     }
 
