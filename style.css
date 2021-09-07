@@ -5,10 +5,11 @@ table {
 }
 
 .center {
-  position: absolute;
-  top: 20%;
-  left: 35%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: auto;
+  height: 50vh;
 }
 
 .btn-newentry{
