@@ -65,20 +65,24 @@ function createImage(url){
 }
 
 function onDelete(id){
-    var row = document.getElementById(id)
-    const entry = {
-        name: row.childNodes[1].textContent,
-        surname: row.childNodes[2].textContent,
-        email: row.childNodes[3].textContent,
-        gender: row.childNodes[4].textContent,
-        birthdate: row.childNodes[5].textContent
+
+    if(confirm('Are you sure you want to remove this entry?')){
+        var row = document.getElementById(id)
+        const entry = {
+            name: row.childNodes[1].textContent,
+            surname: row.childNodes[2].textContent,
+            email: row.childNodes[3].textContent,
+            gender: row.childNodes[4].textContent,
+            birthdate: row.childNodes[5].textContent
+        }
+
+        tableContent = tableContent.filter((value, index, arr) => {
+            return JSON.stringify(value) != JSON.stringify(entry)
+        })
+
+        row.remove()
     }
-
-    tableContent = tableContent.filter((value, index, arr) => {
-        return JSON.stringify(value) != JSON.stringify(entry)
-    })
-
-    row.remove()
+    
 }
 
 function openModal(){
