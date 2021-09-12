@@ -1,3 +1,25 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyA81E4McyCmkUZ-2TvW2_dJQIqSCOVv5Wc",
+  authDomain: "content-managment-system.firebaseapp.com",
+  projectId: "content-managment-system",
+  storageBucket: "content-managment-system.appspot.com",
+  messagingSenderId: "573005273475",
+  appId: "1:573005273475:web:ad618d314c24ee784dfeb6",
+  measurementId: "G-MWLJ0M568K"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
 let tableContent = [
     {
         profileImg: undefined,
@@ -176,13 +198,13 @@ function validateEmail(email) {
     return undefined
 }
 
-function formatDate(user_date, str) {
-    if(!user_date){
+function formatDate(user_date) {
+    if (!user_date) {
         return undefined
     }
 
     var birthdate = new Date(user_date)
-    if(calculateAge(birthdate) < 16)
+    if (calculateAge(birthdate) < 16)
         return undefined
 
     var formatter = user_date.split('-')
@@ -194,7 +216,7 @@ function formatDate(user_date, str) {
     return `${day} ${month} ${year}`
 }
 
-function calculateAge(birthday) { // birthday is a date
+function calculateAge(birthday) { 
     var ageDifMs = Date.now() - birthday.getTime();
     var ageDate = new Date(ageDifMs); // miliseconds from epoch
     return Math.abs(ageDate.getUTCFullYear() - 1970);
