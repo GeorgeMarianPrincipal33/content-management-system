@@ -1,4 +1,4 @@
-import { getEmployees, addElementToFirebase, removeFromFirebase, searchFirebaseByName } from "./firebase.js"
+import { getEmployees, addElementToFirebase, removeFromFirebase, searchFirebaseByName, sortFirebaseBtName } from "./firebase.js"
 
 async function tableCreate() {
     var tbl  = document.getElementById('entries').getElementsByTagName('tbody')[0]
@@ -223,16 +223,15 @@ function addElementInTable(tbl, id, entry) {
     td.appendChild(createButton(tr.id));
 }
 
-function sortEntriesByName() {
+async function sortEntriesByName() {
     var tbody  = document.getElementById('entries').getElementsByTagName('tbody')[0]
     var new_tbody = document.createElement('tbody')
 
-    tableContent.sort((a, b) => {
-        return a.name.localeCompare(b.name)
-    })
+    const employees = await sortFirebaseBtName()
 
-    for(const entry of tableContent) {
-        addElementInTable(new_tbody, entry)
+    for(const entry of employees) {
+        const element = createElement(entry)
+        addElementInTable(new_tbody, entry.id, element)
     }
 
     tbody.parentNode.replaceChild(new_tbody, tbody)

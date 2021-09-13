@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, doc, deleteDoc, query, where  } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"
+import { getFirestore, collection, getDocs, addDoc, doc, deleteDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -12,14 +12,14 @@ const firebaseConfig = {
   appId: "1:573005273475:web:ad618d314c24ee784dfeb6",
   measurementId: "G-MWLJ0M568K",
 };
+const COLLECTION_NAME = 'employees'
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app)
-const COLLECTION_NAME = 'employees'
+const employeesRef = collection(db, COLLECTION_NAME);
 
 export async function getEmployees() {
-    const employeesRef = collection(db, COLLECTION_NAME);
     const employeesSnapshot = await getDocs(employeesRef);
     const employeesList = employeesSnapshot.docs.map(doc => {
         var obj = doc.data()
@@ -28,11 +28,10 @@ export async function getEmployees() {
         return obj
     });
 
-    return employeesList;
+    return employeesList
 }
 
 export async function addElementToFirebase(element) {
-    const employeesRef = collection(db, COLLECTION_NAME);
     const docRef = await addDoc(employeesRef, element)
 
     return docRef.id
@@ -42,10 +41,8 @@ export async function removeFromFirebase(id) {
     await deleteDoc(doc(db, COLLECTION_NAME, id))
 }
 
-export async function searchFirebaseByName(name){
-
-    const employeesRef = collection(db, COLLECTION_NAME);
-    const q = query(employeesRef, where("name", "<=", name))
+export async function searchFirebaseByName(name){    
+    const q = query(employeesRef, where("name", "==", name))
     const querySnapshot = await getDocs(q);
     const employeesList = querySnapshot.docs.map(doc => {
         var obj = doc.data()
@@ -54,5 +51,19 @@ export async function searchFirebaseByName(name){
         return obj
     });
 
-    return employeesList;
+    return employeesList
+}
+
+export async function sortFirebaseBtName(){
+    const q = query(employeesRef, orderBy('name'))
+
+    const querySnapshot = await getDocs(q);
+    const employeesList = querySnapshot.docs.map(doc => {
+        var obj = doc.data()
+        obj['id'] = doc.id
+        
+        return obj
+    });
+
+    return employeesList
 }
