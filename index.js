@@ -56,7 +56,7 @@ tableCreate();
 function createElement(entry) {
 
     const element = {
-        profileImg: entry.profileImage,
+        profileImage: entry.profileImage,
         name: entry.name,
         surname: entry.surname,
         email: entry.email,
@@ -242,7 +242,7 @@ function addElementInTable(tbl, id, entry) {
         var td = tr.insertCell();
         var element;
 
-        if(entryProperty == 'profileImg') {
+        if(entryProperty == 'profileImage') {
            element = createImage(entry[entryProperty]);
         } else {
             element = document.createTextNode(entry[entryProperty])
