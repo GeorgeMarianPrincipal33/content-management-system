@@ -44,7 +44,13 @@ var ids = 0
 async function getEmployees() {
     const employeesCol = collection(db, 'employees');
     const employeesSnapshot = await getDocs(employeesCol);
-    const employeesList = employeesSnapshot.docs.map(doc => doc.data());
+    const employeesList = employeesSnapshot.docs.map(doc => {
+        var obj = doc.data()
+        obj['id'] = doc.id
+        
+        return obj
+    });
+
     return employeesList;
 }
 
