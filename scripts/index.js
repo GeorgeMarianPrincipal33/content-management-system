@@ -1,4 +1,4 @@
-import { getEmployees, addElementToFirebase, removeFromFirebase } from "./firebase.js"
+import { getEmployees, addElementToFirebase, removeFromFirebase, searchFirebaseByName } from "./firebase.js"
 
 async function tableCreate() {
     var tbl  = document.getElementById('entries').getElementsByTagName('tbody')[0]
@@ -238,7 +238,7 @@ function sortEntriesByName() {
     tbody.parentNode.replaceChild(new_tbody, tbody)
 }
 
-function searchByName() {
+async function searchByName() {
     var inputValue = document.getElementById('searchBar').value
     
     if(inputValue == '')
@@ -247,13 +247,11 @@ function searchByName() {
     var tbody  = document.getElementById('entries').getElementsByTagName('tbody')[0]
     var new_tbody = document.createElement('tbody')
 
-    var searchedEntries = tableContent.filter((value, index, arr) => {
-        return value.name.toLowerCase().includes(inputValue.toLowerCase()) || 
-                value.surname.toLowerCase().includes(inputValue.toLowerCase())
-    })
+    var searchedEntries = await searchFirebaseByName(inputValue)
 
     for(const entry of searchedEntries) {
-        addElementInTable(new_tbody, entry)
+        const element = createElement(entry)
+        addElementInTable(new_tbody, entry.id, element)
     }
 
     tbody.parentNode.replaceChild(new_tbody, tbody)

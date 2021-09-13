@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"
+import { getFirestore, collection, getDocs, addDoc, doc, deleteDoc, query, where  } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -19,8 +19,8 @@ const db = getFirestore(app)
 const COLLECTION_NAME = 'employees'
 
 export async function getEmployees() {
-    const employeesCol = collection(db, COLLECTION_NAME);
-    const employeesSnapshot = await getDocs(employeesCol);
+    const employeesRef = collection(db, COLLECTION_NAME);
+    const employeesSnapshot = await getDocs(employeesRef);
     const employeesList = employeesSnapshot.docs.map(doc => {
         var obj = doc.data()
         obj['id'] = doc.id
@@ -32,12 +32,27 @@ export async function getEmployees() {
 }
 
 export async function addElementToFirebase(element) {
-    const employeesCol = collection(db, COLLECTION_NAME);
-    const docRef = await addDoc(employeesCol, element)
+    const employeesRef = collection(db, COLLECTION_NAME);
+    const docRef = await addDoc(employeesRef, element)
 
     return docRef.id
 }
 
 export async function removeFromFirebase(id) {
     await deleteDoc(doc(db, COLLECTION_NAME, id))
+}
+
+export async function searchFirebaseByName(name){
+
+    const employeesRef = collection(db, COLLECTION_NAME);
+    const q = query(employeesRef, where("name", "<=", name))
+    const querySnapshot = await getDocs(q);
+    const employeesList = querySnapshot.docs.map(doc => {
+        var obj = doc.data()
+        obj['id'] = doc.id
+        
+        return obj
+    });
+
+    return employeesList;
 }
