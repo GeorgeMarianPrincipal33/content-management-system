@@ -14,7 +14,7 @@
 
             <!-- Modal content -->
             <div class="modal-content">
-              <span class="close" onclick="closeModal()">&times;</span><br>
+              <span class="close" id="closeModal">&times;</span><br>
 
               <div class="modal-form" >
                 <div>
@@ -45,7 +45,7 @@
                 </div>
 
                 <div>
-                    <button class="btn-newentry" onclick="createNewEntry()">Create</button>
+                    <button class="btn-newentry" id="createNewEntry">Create</button>
                 </div>
                 
                 
@@ -57,12 +57,12 @@
         <div class="center">
             <div>
                 <div >
-                    <button class="btn-newentry" onclick="openModal()">New entry</button>
-                    <button class="btn-newentry" onclick="sortEntriesByName()">Sort by Name</button>
+                    <button class="btn-newentry" id="openModal">New entry</button>
+                    <button class="btn-newentry" id="sortEntriesByName">Sort by Name</button>
 
                     
                     <input type="search" id="searchBar" class="input-textfield" placeholder="Name" >
-                    <button class="btn-newentry btn-search"  onclick="searchByName()">Search</button>
+                    <button class="btn-newentry btn-search"  id="searchByName">Search</button>
                 </div>
                 <div >
                     <table id='entries'>
@@ -88,6 +88,6 @@
             </div>
         </div>
         
-    <script src="index.js"></script>
+    <script type="module" src="index.js"></script>
     </body>
 </html>

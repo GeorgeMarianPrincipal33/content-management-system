@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
+import { getFirestore, collection, getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -13,12 +13,12 @@ const firebaseConfig = {
   storageBucket: "content-managment-system.appspot.com",
   messagingSenderId: "573005273475",
   appId: "1:573005273475:web:ad618d314c24ee784dfeb6",
-  measurementId: "G-MWLJ0M568K"
+  measurementId: "G-MWLJ0M568K",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const db = getFirestore(app)
 
 let tableContent = [
     {
@@ -38,31 +38,50 @@ let tableContent = [
         birthdate: "21 August 1998"
     },
 ]
+var ids = 0
 
-const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'Octomber',
-    'November',
-    'December',
-]
-ids = 0
+async function getEmployees() {
+    const employeesCol = collection(db, 'employees');
+    const employeesSnapshot = await getDocs(employeesCol);
+    const employeesList = employeesSnapshot.docs.map(doc => doc.data());
+    return employeesList;
+}
 
-function tableCreate() {
+async function tableCreate() {
     var tbl  = document.getElementById('entries').getElementsByTagName('tbody')[0]
 
-    for(const entry of tableContent) {
-        addElementInTable(tbl, entry)
+    let employees = await getEmployees()
+    console.log(employees)
+
+    for(const entry of employees) {
+        const element = createElement(entry)
+        addElementInTable(tbl, element)
     }
 }
 tableCreate();
+
+(function () {
+  
+    document.getElementById('openModal').addEventListener('click', openModal, true);
+    document.getElementById('closeModal').addEventListener('click', closeModal, true);
+    document.getElementById('createNewEntry').addEventListener('click', createNewEntry, true);
+    document.getElementById('sortEntriesByName').addEventListener('click', sortEntriesByName, true);
+    document.getElementById('searchByName').addEventListener('click', searchByName, true);
+  })();
+
+function createElement(entry) {
+
+    const element = {
+        profileImg: (entry.profileImage === 'undefined') ? undefined : entry.profileImage,
+        name: entry.name,
+        surname: entry.surname,
+        email: entry.email,
+        gender: entry.gender,
+        birthdate: validateDate(entry.birthdate)
+    }
+
+    return element
+}
 
 function createButton(id) {
     var btn = document.createElement('input');
@@ -132,12 +151,12 @@ function createNewEntry() {
     var name = document.getElementById('new-name').value
     var surname = document.getElementById('new-surname').value
     
-    var email = validateEmail(document.getElementById('new-email').value, {loggingMessage})
+    var email = validateEmail(document.getElementById('new-email').value)
     var gender = document.getElementById('new-gender').value
-    var birthdate = formatDate(document.getElementById('new-birthdate').value, {loggingMessage})
+    var birthdate = validateDate(document.getElementById('new-birthdate').value)
     
     if(!name || !surname ) {
-        loggingMessage = "No name or surname war provided\n"
+        loggingMessage = "No name or surname was provided\n"
     }
     
     if(!email) {
@@ -153,16 +172,17 @@ function createNewEntry() {
         return
     }
 
-    const addNewEntry = (img) => {
+    const addNewEntry = async (img) => {
         var element = {
-            profileImg: img,
+            profileImage: img,
             name: name,
             surname: surname,
             email: email,
             gender: gender,
             birthdate: birthdate
         }
-        tableContent.push(element)
+        await setDoc(doc(db, "employees", "LA"), element)
+
         var tbl  = document.getElementById('entries').getElementsByTagName('tbody')[0]
         addElementInTable(tbl, element)
         
@@ -198,7 +218,7 @@ function validateEmail(email) {
     return undefined
 }
 
-function formatDate(user_date) {
+function validateDate(user_date) {
     if (!user_date) {
         return undefined
     }
@@ -207,11 +227,29 @@ function formatDate(user_date) {
     if (calculateAge(birthdate) < 16)
         return undefined
 
-    var formatter = user_date.split('-')
-    var year = formatter[0]
-    var monthIndex = Number(formatter[1])
+    return formatDate(birthdate)
+}
+
+function formatDate(date){ 
+    const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'Octomber',
+        'November',
+        'December',
+    ]
+
+    var year = date.getFullYear()
+    var monthIndex = Number(date.getMonth())
     var month = months[monthIndex]
-    var day = formatter[2]
+    var day = date.getDate()
 
     return `${day} ${month} ${year}`
 }
