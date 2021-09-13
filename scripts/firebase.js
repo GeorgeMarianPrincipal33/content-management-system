@@ -21,14 +21,7 @@ const employeesRef = collection(db, COLLECTION_NAME);
 
 export async function getEmployees() {
     const employeesSnapshot = await getDocs(employeesRef);
-    const employeesList = employeesSnapshot.docs.map(doc => {
-        var obj = doc.data()
-        obj['id'] = doc.id
-        
-        return obj
-    });
-
-    return employeesList
+    return docsToList(employeesSnapshot)
 }
 
 export async function addElementToFirebase(element) {
@@ -44,26 +37,23 @@ export async function removeFromFirebase(id) {
 export async function searchFirebaseByName(name){    
     const q = query(employeesRef, where("name", "==", name))
     const querySnapshot = await getDocs(q);
-    const employeesList = querySnapshot.docs.map(doc => {
-        var obj = doc.data()
-        obj['id'] = doc.id
-        
-        return obj
-    });
-
-    return employeesList
+    return docsToList(querySnapshot)
 }
 
 export async function sortFirebaseBtName(){
     const q = query(employeesRef, orderBy('name'))
 
     const querySnapshot = await getDocs(q);
-    const employeesList = querySnapshot.docs.map(doc => {
+    return docsToList(querySnapshot)
+}
+
+function docsToList(snapshot){
+    const list = snapshot.docs.map(doc => {
         var obj = doc.data()
         obj['id'] = doc.id
         
         return obj
-    });
+    })
 
-    return employeesList
+    return list
 }
