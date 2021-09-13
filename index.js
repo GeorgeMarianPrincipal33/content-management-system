@@ -1,9 +1,5 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"
-import { ref, push, set, getDatabase } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js"
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getFirestore, collection, getDocs, addDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -20,29 +16,10 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app)
-
-let tableContent = [
-    {
-        profileImg: undefined,
-        name: "Marian",
-        surname: "George",
-        email: "george@email.com",
-        gender: "Male",
-        birthdate: "21 April 3020"
-    },
-    {
-        profileImg: undefined,
-        name: "Ancuta",
-        surname: "Carmen",
-        email: "email1@gmail.com",
-        gender: "Female",
-        birthdate: "21 August 1998"
-    },
-]
-var ids = 0
+const COLLECTION_NAME = 'employees'
 
 async function getEmployees() {
-    const employeesCol = collection(db, 'employees');
+    const employeesCol = collection(db, COLLECTION_NAME);
     const employeesSnapshot = await getDocs(employeesCol);
     const employeesList = employeesSnapshot.docs.map(doc => {
         var obj = doc.data()
@@ -62,7 +39,7 @@ async function tableCreate() {
 
     for(const entry of employees) {
         const element = createElement(entry)
-        addElementInTable(tbl, element)
+        addElementInTable(tbl, entry.id, element)
     }
 }
 tableCreate();
@@ -79,7 +56,7 @@ tableCreate();
 function createElement(entry) {
 
     const element = {
-        profileImg: (entry.profileImage === 'undefined') ? undefined : entry.profileImage,
+        profileImg: entry.profileImage,
         name: entry.name,
         surname: entry.surname,
         email: entry.email,
@@ -101,7 +78,7 @@ function createButton(id) {
 }
 
 function createImage(url) {
-    if(url == undefined) {
+    if(url === 'undefined') {
         url = 'resources/no_profile_image.png'
     }
     
@@ -112,22 +89,11 @@ function createImage(url) {
     return img
 }
 
-function onDelete(id) {
+async function onDelete(id) {
 
     if(confirm('Are you sure you want to remove this entry?')) {
         var row = document.getElementById(id)
-        const entry = {
-            name: row.childNodes[1].textContent,
-            surname: row.childNodes[2].textContent,
-            email: row.childNodes[3].textContent,
-            gender: row.childNodes[4].textContent,
-            birthdate: row.childNodes[5].textContent
-        }
-
-        tableContent = tableContent.filter((value, index, arr) => {
-            return JSON.stringify(value) != JSON.stringify(entry)
-        })
-
+        await deleteDoc(doc(db, COLLECTION_NAME, id));
         row.remove()
     }
     
@@ -152,7 +118,7 @@ function clearFields() {
     document.getElementById('new-birthdate').value = ''
 }
 
-function createNewEntry() {
+async function createNewEntry() {
     let loggingMessage = new String('');
 
     var name = document.getElementById('new-name').value
@@ -181,7 +147,7 @@ function createNewEntry() {
 
     const addNewEntry = async (img) => {
         var element = {
-            profileImage: img,
+            profileImage: (img === undefined) ? 'undefined' : img,
             name: name,
             surname: surname,
             email: email,
@@ -189,11 +155,11 @@ function createNewEntry() {
             birthdate: birthdate
         }
 
-        const employeesCol = collection(db, 'employees');
-        await addDoc(employeesCol, element)
+        const employeesCol = collection(db, COLLECTION_NAME);
+        const docRef = await addDoc(employeesCol, element)
 
         var tbl  = document.getElementById('entries').getElementsByTagName('tbody')[0]
-        addElementInTable(tbl, element)
+        addElementInTable(tbl,docRef.id, element)
         
         clearFields()
         closeModal()
@@ -269,9 +235,9 @@ function calculateAge(birthday) {
     return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
 
-function addElementInTable(tbl, entry) {
+function addElementInTable(tbl, id, entry) {
     var tr = tbl.insertRow();
-    tr.id = ids++
+    tr.id = id
     for(const entryProperty in entry){
         var td = tr.insertCell();
         var element;
