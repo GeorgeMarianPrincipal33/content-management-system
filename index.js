@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
-import { getFirestore, collection, getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"
+import { getFirestore, collection, getDocs, addDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"
+import { ref, push, set, getDatabase } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -181,7 +182,9 @@ function createNewEntry() {
             gender: gender,
             birthdate: birthdate
         }
-        await setDoc(doc(db, "employees", "LA"), element)
+
+        const employeesCol = collection(db, 'employees');
+        await addDoc(employeesCol, element)
 
         var tbl  = document.getElementById('entries').getElementsByTagName('tbody')[0]
         addElementInTable(tbl, element)
